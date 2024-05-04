@@ -6,10 +6,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tik_tok/authentication/login_view.dart';
 import 'package:tik_tok/global.dart';
+import 'package:tik_tok/home/home_view.dart';
 import 'user.dart' as userModel;
 
 class AuthenticationController extends GetxController {
   static AuthenticationController instanceAuth = Get.find();
+
+  late Rx<User?> _currentUser;
 
   late Rx<File?> _pickedFile;
   File? get profieImage => _pickedFile.value;
@@ -64,10 +67,12 @@ class AuthenticationController extends GetxController {
           .collection('users')
           .doc(credential.user!.uid)
           .set(user.toJson());
+      Get.snackbar("Аккаунт создан успешно", 'Поздравляю вас!');
+      showProgressBar = false;
     } catch (error) {
       Get.snackbar(
-        "Acount creation unsuccesful",
-        'Error occurred while creating account. Try again.',
+        "Создание учетной записи не удалось",
+        'Произошла ошибка при создании учетной записи. Попробуйте еще раз.',
       );
       showProgressBar = false;
       Get.to(const LoginView());
@@ -85,5 +90,44 @@ class AuthenticationController extends GetxController {
 
     String downloadUrlOfUploadimage = await taskSnapshot.ref.getDownloadURL();
     return downloadUrlOfUploadimage;
+  }
+
+  void loginUserNow({
+    String? userEmail,
+    String? userPassword,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: userEmail!,
+        password: userPassword!,
+      );
+      Get.snackbar("Авторизация прошло успешно", 'Вы успешно вошли в систему!');
+      showProgressBar = false;
+    } catch (error) {
+      Get.snackbar(
+        "Не удалось войти",
+        'Произошла ошибка во время аутентификации входа.',
+      );
+      showProgressBar = false;
+      Get.to(const LoginView());
+    }
+  }
+
+  goToScreen(User? currentUser) {
+    if (currentUser == null) {
+      Get.offAll(const LoginView());
+    } else {
+      Get.offAll(const HomeView());
+    }
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+
+    _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
+    _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    ever(_currentUser, goToScreen);
   }
 }

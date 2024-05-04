@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:tik_tok/authentication/authentication_controller.dart';
 import 'package:tik_tok/authentication/signup_view.dart';
 import 'package:tik_tok/widgets/input_text_widget.dart';
 
@@ -15,6 +16,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+  final authenticationController = AuthenticationController.instanceAuth;
   bool showProgressBar = false;
   @override
   Widget build(BuildContext context) {
@@ -80,10 +82,19 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                showProgressBar = true;
-                              });
                               // login user now
+                              if (emailTextEditingController.text.isNotEmpty &&
+                                  passwordTextEditingController
+                                      .text.isNotEmpty) {
+                                setState(() {
+                                  showProgressBar = true;
+                                });
+                                authenticationController.loginUserNow(
+                                  userEmail: emailTextEditingController.text,
+                                  userPassword:
+                                      passwordTextEditingController.text,
+                                );
+                              }
                             },
                             child: const Center(
                               child: Text(

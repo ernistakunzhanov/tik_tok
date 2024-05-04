@@ -5,12 +5,10 @@ import 'package:tik_tok/authentication/authentication_controller.dart';
 import 'package:tik_tok/authentication/login_view.dart';
 import 'package:tik_tok/firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) {
-    Get.put(AuthenticationController());
-  });
-
+  await Firebase.initializeApp()
+      .then((value) => Get.put(AuthenticationController()));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
