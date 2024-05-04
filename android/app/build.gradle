@@ -22,10 +22,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-// apply plugin: "com.android.application"
-// apply plugin: "com.google.gms.google-services"
-// apply plugin: "kotlin-android"
-// apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     namespace "com.example.tik_tok"
     compileSdk flutter.compileSdkVersion
@@ -69,7 +65,4 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    // implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-    // implementation("com.google.firebase:firebase-analytics")
-}
+dependencies {}

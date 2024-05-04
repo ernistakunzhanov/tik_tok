@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tik_tok/authentication/authentication_controller.dart';
 import 'package:tik_tok/authentication/login_view.dart';
 import 'package:tik_tok/firebase_options.dart';
